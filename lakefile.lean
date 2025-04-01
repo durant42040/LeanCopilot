@@ -234,12 +234,30 @@ target libctranslate2 pkg : FilePath := do
     createParentDirs dst
     let ct2URL := "https://github.com/OpenNMT/CTranslate2"
 
+<<<<<<< Updated upstream
     try
       let depTrace := Hash.ofString ct2URL
       setTrace depTrace
       buildFileUnlessUpToDate' dst do
         logInfo s!"Cloning CTranslate2 from {ct2URL}"
         gitClone ct2URL pkg.buildDir
+=======
+    let depTrace := Hash.ofString ct2URL
+    setTrace depTrace
+    buildFileUnlessUpToDate' dst do
+      logInfo s!"Cloning CTranslate2 from {ct2URL}"
+      if !(← (pkg.buildDir / "CTranslate2").pathExists) then
+        let _ ← gitClone ct2URL pkg.buildDir
+        if getOS! == .windows then
+          -- git clone --recursive doesn't work on powershell
+          let _ ← gitClone "https://github.com/jarro2783/cxxopts.git" (pkg.buildDir / "CTranslate2/third_party")
+          let _ ← gitClone "https://github.com/NVIDIA/thrust.git" (pkg.buildDir / "CTranslate2/third_party")
+          let _ ← gitClone "https://github.com/google/googletest.git" (pkg.buildDir / "CTranslate2/third_party")
+          let _ ← gitClone "https://github.com/google/cpu_features.git" (pkg.buildDir / "CTranslate2/third_party")
+          let _ ← gitClone "https://github.com/gabime/spdlog.git" (pkg.buildDir / "CTranslate2/third_party")
+          let _ ← gitClone "https://github.com/google/ruy.git" (pkg.buildDir / "CTranslate2/third_party")
+          let _ ← gitClone "https://github.com/NVIDIA/cutlass.git" (pkg.buildDir / "CTranslate2/third_party")
+>>>>>>> Stashed changes
 
         let ct2Dir := pkg.buildDir / "CTranslate2"
         let flags ← getCt2CmakeFlags
