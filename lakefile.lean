@@ -357,13 +357,14 @@ target libctranslate2 pkg : FilePath := do
 
 def buildCpp (pkg : Package) (path : FilePath) (dep : Job FilePath) : SpawnM (Job FilePath) := do
   let optLevel := if pkg.buildType == .release then "-O3" else "-O0"
-  let flags := #["-std=c++17", optLevel]
+  let flags := #["-fPIC", "-std=c++17", optLevel]
   let args := flags ++ #["-I", (← getLeanIncludeDir).toString, "-I", (pkg.buildDir / "include").toString]
   let oFile := pkg.buildDir / (path.withExtension "o")
   let srcJob ← inputTextFile <| pkg.dir / path
+  let leanPath ← Lake.getLeanSysroot
 
   buildFileAfterDep oFile (.collectList [srcJob, dep]) (extraDepTrace := computeHash flags) fun deps =>
-    compileO oFile deps[0]! args s!"{Platform.leanToolchainPath}/bin/clang.exe"
+    compileO oFile deps[0]! args s!"{leanPath}/bin/clang.exe"
 
 
 target ct2.o pkg : FilePath := do
