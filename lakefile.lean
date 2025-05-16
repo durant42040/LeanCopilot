@@ -363,7 +363,7 @@ def buildCpp (pkg : Package) (path : FilePath) (dep : Job FilePath) : SpawnM (Jo
   let srcJob ← inputTextFile <| pkg.dir / path
 
   buildFileAfterDep oFile (.collectList [srcJob, dep]) (extraDepTrace := computeHash flags) fun deps =>
-    compileO oFile deps[0]! args "clang++"
+    compileO oFile deps[0]! args s!"{Platform.leanToolchainPath}/bin/clang.exe"
 
 
 target ct2.o pkg : FilePath := do
