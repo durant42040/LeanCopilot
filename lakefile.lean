@@ -357,7 +357,7 @@ target libctranslate2 pkg : FilePath := do
 
 def buildCpp (pkg : Package) (path : FilePath) (dep : Job FilePath) : SpawnM (Job FilePath) := do
   let optLevel := if pkg.buildType == .release then "-O3" else "-O0"
-  let flags := #["-fPIC", "-std=c++17", optLevel]
+  let flags := #["-std=c++17", optLevel]
   let args := flags ++ #["-I", (← getLeanIncludeDir).toString, "-I", (pkg.buildDir / "include").toString]
   let oFile := pkg.buildDir / (path.withExtension "o")
   let srcJob ← inputTextFile <| pkg.dir / path
