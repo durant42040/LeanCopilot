@@ -5,11 +5,13 @@ on:
     branches:
       - main
       - stable
+      - windows-support
  
   push:
     branches:
       - main
       - stable
+      - windows-support
 
 jobs:
   build-release:
