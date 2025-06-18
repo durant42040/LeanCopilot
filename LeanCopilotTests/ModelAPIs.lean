@@ -124,12 +124,4 @@ def internLM : ExternalGenerator := {
 
 -/
 
-/-
-def kimina : ExternalGenerator := {
-  name := "kimina"
-  host := "localhost"
-  port := 23337
-}
-
-#eval generate kimina "n : ℕ\n⊢ gcd n n = n"
--/
+#eval generateRunpod "n : ℕ\n⊢ gcd n n = n"

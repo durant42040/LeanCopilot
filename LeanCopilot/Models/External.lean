@@ -74,6 +74,17 @@ def ExternalGenerator.generate (model : ExternalGenerator) (input : String) (tar
   return res.outputs.map fun g => (g.output, g.score)
 
 
+def generateRunpod (input : String) : IO $ Array (String × Float) := do
+  let url := s!"https://dpmy1qqeb7t1zb-4000.proxy.runpod.net/generate"
+  let req : GeneratorRequest := {
+    name := "kimina",
+    input := input,
+    «prefix» := ""
+  }
+  let res : GeneratorResponse ← send req url
+  return res.outputs.map fun g => (g.output, g.score)
+
+
 instance : TextToText ExternalGenerator := ⟨ExternalGenerator.generate⟩
 
 
